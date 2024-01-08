@@ -2,9 +2,9 @@
 {
     public class ContaCorrente
     {
-        public string idcontacorrente { get; set; }
-        public int numero { get; set; }
-        public string nome { get; set; }
-        public string ativo { get; set; }
+        public string IdContaCorrente { get; set; }
+        public int Numero { get; set; }
+        public string Nome { get; set; }
+        public string Ativo { get; set; }
     }
 }

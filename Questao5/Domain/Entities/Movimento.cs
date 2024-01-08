@@ -7,5 +7,7 @@
         public DateTime DataMovimento { get; set; }
         public string TipoMovimento { get; set; }
         public decimal Valor { get; set; }
+
+        public ContaCorrente ContaCorrente { get; set; }
     }
 }

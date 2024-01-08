@@ -16,8 +16,8 @@ namespace Questao5.Infrastructure.Services.Controllers
             this._mediator = mediator;
         }
 
-        [HttpGet("MovimentacaoContaCorrente")]
-        public async Task<IActionResult> Get([FromQuery] MovimentacaoContaCorrenteCommand command)
+        [HttpPost("MovimentacaoContaCorrente")]
+        public async Task<IActionResult> MovimentacaoContaCorrente([FromBody] MovimentacaoContaCorrenteCommand command)
         {
             // Exemplo de consulta usando Dapper
             var result = await _mediator.Send(command);
@@ -32,12 +32,20 @@ namespace Questao5.Infrastructure.Services.Controllers
             }
         }
 
-        // Lembre-se de fechar a conexão quando a instância do controlador for destruída (pode ser feito no método Dispose, por exemplo).
-        // Não é necessário fechar a conexão após cada consulta, pois o Dapper gerencia isso internamente.
-        // No entanto, é uma boa prática fechar a conexão quando ela não for mais necessária.
-        //public void Dispose()
-        //{
-        //    _dbConnection.Close();
-        //}
+
+        [HttpGet("SaldoContaCorrente")]
+        public async Task<IActionResult> SaldoContaCorrente([FromQuery] SaldoContaCorrenteCommand command)
+        {
+           var result = await _mediator.Send(command);
+
+            if (result.Erro == null)
+            {
+                return Ok($"Identificação do Movimento:  {result.IdMovimento}");
+            }
+            else
+            {
+                return BadRequest(result.Erro);
+            }
+        }
     }
 }

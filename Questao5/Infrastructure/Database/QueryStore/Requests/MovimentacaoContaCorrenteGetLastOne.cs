@@ -14,8 +14,11 @@ namespace Questao5.Infrastructure.Database.QueryStore.Requests
         public async Task<MovimentacaoContaCorrenteGetLastOneResponse> Execute()
         {
             var connection = _connection.ConnectionOpen();
-            
-            string command = "SELECT * FROM movimento ORDER BY datamovimento DESC LIMIT 1;";
+
+            string command = "SELECT m.idmovimento, m.idcontacorrente, m.datamovimento, m.tipomovimento, m.valor " +
+                 "FROM movimento m " +
+                 "ORDER BY m.datamovimento DESC LIMIT 1;";
+
             try
             {
                 object response = await connection.QueryFirstAsync<Movimento>(command);
@@ -23,21 +26,26 @@ namespace Questao5.Infrastructure.Database.QueryStore.Requests
                 {
                     var config = new MapperConfiguration(cfg =>
                     {
-                        cfg.CreateMap<Movimento, MovimentacaoContaCorrenteGetLastOneResponse>();
+                        cfg.CreateMap<Movimento, MovimentacaoContaCorrenteGetLastOneResponse>()
+                            .ForMember(dest => dest.IdContaCorrente, opt => opt.MapFrom(src => src.IdContaCorrente));
                     });
+
 
                     var mapper = config.CreateMapper();
                     var result = mapper.Map<MovimentacaoContaCorrenteGetLastOneResponse>(response);
 
+                    connection.Close();
                     return result;
                 }
                 else
                 {
+                    connection.Close();
                     return new MovimentacaoContaCorrenteGetLastOneResponse();
                 };
             }
             catch (Exception ex)
             {
+                connection.Close();
                 return new MovimentacaoContaCorrenteGetLastOneResponse();
             }
             
