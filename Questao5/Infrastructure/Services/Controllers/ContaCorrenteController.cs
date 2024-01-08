@@ -40,7 +40,7 @@ namespace Questao5.Infrastructure.Services.Controllers
 
             if (result.Erro == null)
             {
-                return Ok($"Identificação do Movimento:  {result.IdMovimento}");
+                return Ok(result);
             }
             else
             {

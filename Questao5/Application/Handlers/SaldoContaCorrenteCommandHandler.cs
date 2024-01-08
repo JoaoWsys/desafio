@@ -11,28 +11,21 @@ namespace Questao5.Application.Handlers
     {
         public async Task<SaldoContaCorrenteCommandResult> Handle(SaldoContaCorrenteCommand command, CancellationToken cancellationToken)
         {
-            var movimentacao = new Movimento
-            {  
-                DataMovimento = DateTime.Now,
-                IdContaCorrente = command.IdContaCorrente,
-                IdMovimento = Guid.NewGuid().ToString().ToUpper(),
-                TipoMovimento = command.TipoMovimento,
-                Valor = command.Valor
-            };
-
-            var insert = new MovimentacaoContaCorrenteInsert();
-            var response = insert.Execute(movimentacao);
+            var consulta = new SaldoContaCorrenteSelectByIdContaCorrente();
+            var response = consulta.Execute(command.IdContaCorrente).Result;
             var result = new SaldoContaCorrenteCommandResult();
 
-            if (!response.result)
+            if (response == null)
             {
                 result.Erro = "Tem erros";
                 return result;
             }
             else
             {
-                var registro = new MovimentacaoContaCorrenteGetLastOne().Execute().Result;
-                result.IdMovimento = registro.IdMovimento;
+                result.Data = response.DataHoraResposta;
+                result.SaldoAtual = response.SaldoAtual;
+                result.Nome = response.NomeTitular;
+                result.Numero = response.NumeroContaCorrente;
                 return result;
             }
         }
